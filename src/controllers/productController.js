@@ -24,7 +24,9 @@ const getProductsByName = async (req, res) => {
 };
 
 const getProductById = async (req, res) => {
+
   const { params: { id } } = req;
+
   if (!id) {
     res.status(400).send({
       status: "FAILED",
