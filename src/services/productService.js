@@ -9,18 +9,21 @@ const getCategories = (filters) => {
 const filterItems = (items, filters) => {
   const categories = getCategories(filters[0].values)
   items = items.map(item => {
+
+    const { id, title, currency_id, price, condition, shipping, seller_address } = item
+
     return {
-      id: item.id,
-      title: item.title,
+      id,
+      title,
       price: {
-        currency: item.currency_id,
-        amount: item.price,
-        decimals: item.price
+        currency: currency_id,
+        amount: price,
+        decimals: price
       },
       picture: `http://http2.mlstatic.com/D_${item.thumbnail_id}-V.jpg`,
-      condition: item.condition,
-      free_shipping: item.shipping.free_shipping,
-      seller_address: item.seller_address.state.name
+      condition: condition,
+      free_shipping: shipping.free_shipping,
+      seller_address: seller_address.state.name
     }
   })
   return {
@@ -42,18 +45,22 @@ const getProductsByName = async (param) => {
 };
 
 const filterItem = (item, description) => {
+
+  const { plain_text } = description
+  const { id, title, currency_id, price, condition, shipping, sold_quantity } = item
+
   return {
-    id: item.id,
-    title: item.title,
+    id,
+    title,
     price: {
-      currency: item.currency_id,
-      amount: item.price
+      currency: currency_id,
+      amount: price
     },
     picture: `http://http2.mlstatic.com/D_${item.thumbnail_id}-F.jpg`,
-    condition: item.condition,
-    free_shipping: item.shipping.free_shipping,
-    sold_quantity: item.sold_quantity,
-    description: description.plain_text
+    condition,
+    free_shipping: shipping.free_shipping,
+    sold_quantity,
+    description: plain_text
   }
 }
 
