@@ -3,11 +3,12 @@ const axios = require('axios')
 const url = 'https://api.mercadolibre.com/sites/MLA'
 
 const getCategories = (filters) => {
-  return filters[0].path_from_root.map(cat => cat.name)
+  // return filters[0].path_from_root.map(cat => cat.name)
+  return filters[0].values[0].name
 }
 
 const filterItems = (items, filters) => {
-  const categories = getCategories(filters[0].values)
+  const category = getCategories(filters)
   items = items.map(item => {
 
     const { id, title, currency_id, price, condition, shipping, seller_address } = item
@@ -21,22 +22,25 @@ const filterItems = (items, filters) => {
         decimals: price
       },
       picture: `http://http2.mlstatic.com/D_${item.thumbnail_id}-V.jpg`,
-      condition: condition,
+      condition,
       free_shipping: shipping.free_shipping,
       seller_address: seller_address.state.name
     }
   })
   return {
     items,
-    categories
+    category
   }
 }
 
-const getProductsByName = async (param) => {
+const getProductsByName = async (param, limit) => {
 
   try {
-    const { data } = await axios.get(`${url}/search?q=${param}&limit=4`)
+    const { data } = await axios.get(`${url}/search?q=${param}&limit=${limit}`)
     const items = filterItems(data.results, data.filters)
+    // const categoryUrl = `https://api.mercadolibre.com/categories/${productId}`
+    // const category = await axios.get(categoryUrl)
+    // console.log(category)
     return items
   } catch (err) {
     return err

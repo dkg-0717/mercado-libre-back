@@ -3,8 +3,9 @@ const productdService = require("../services/productService");
 const getProductsByName = async (req, res) => {
 
   const { query } = req;
+  const { q, limit } = query
 
-  if (!query.q) {
+  if (!q) {
     res.status(400).send({
       status: "FAILED",
       data: { error: "Parameter ': q' can not be empty" },
@@ -13,7 +14,7 @@ const getProductsByName = async (req, res) => {
   }
 
   try {
-    const products = await productdService.getProductsByName(query.q);
+    const products = await productdService.getProductsByName(q, limit);
     res.send({ status: "OK", data: products });
   } catch (error) {
     res
